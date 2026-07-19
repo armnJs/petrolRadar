@@ -62,10 +62,12 @@ export default function HomePage() {
         onReportClick={() => setModalOpen(true)}
         onToggleSidebar={() => setSidebarOpen((o) => !o)}
         sidebarOpen={sidebarOpen}
+        filterMode={filterMode}
+        onFilterChange={setFilterMode}
       />
 
-      {/* Fuel Toggle */}
-      <div className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-xl border-b border-slate-200 dark:border-white/10 shadow-sm dark:shadow-md z-[400] transition-colors duration-300">
+      {/* Mobile Fuel Toggle (Desktop version is in Header) */}
+      <div className="lg:hidden bg-white/80 dark:bg-slate-900/40 backdrop-blur-xl border-b border-slate-200 dark:border-white/10 shadow-sm dark:shadow-md z-[400] transition-colors duration-300">
         <div className="max-w-3xl mx-auto">
           <FuelToggle activeMode={filterMode} onChange={setFilterMode} />
         </div>
