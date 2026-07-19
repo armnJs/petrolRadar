@@ -67,7 +67,6 @@ export default function FuelToggle({ activeMode, onChange, className = '' }: Fue
             </button>
           );
         })}
-        })}
     </div>
   );
 }
