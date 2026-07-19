@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Petrol Radar | India High Octane & Low Ethanol Finder</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Leaflet CSS & JS for OpenStreetMap -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        #map { height: calc(100vh - 180px); }
+        .custom-popup .leaflet-popup-content-wrapper { border-radius: 0.75rem; padding: 0.5rem; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <div class="bg-amber-500 p-2 rounded-lg text-slate-950 font-black">PPR</div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
+                        Premium Petrol Radar
+                    </h1>
+                    <p class="text-xs text-slate-400">High Octane & Low-Ethanol Fuel Tracker • India</p>
+                </div>
+            </div>
+
+            <!-- Filter Controls -->
+            <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                <select id="octaneFilter" onchange="filterPumps()" class="bg-slate-800 border border-slate-700 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-amber-500">
+                    <option value="ALL">All Octane Ratings</option>
+                    <option value="100">100 RON (XP100 / Power100)</option>
+                    <option value="99">99 RON (HPCL Power 99)</option>
+                    <option value="97">97 RON (BPCL Speed 97)</option>
+                    <option value="95">95 RON (XP95 / Power95)</option>
+                </select>
+                
+                <select id="ethanolFilter" onchange="filterPumps()" class="bg-slate-800 border border-slate-700 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-amber-500">
+                    <option value="ALL">All Ethanol Blends</option>
+                    <option value="0">Zero / Trace Ethanol (~0%)</option>
+                    <option value="11">Low Ethanol (≤ 11%)</option>
+                    <option value="15">Medium Ethanol (≤ 15%)</option>
+                </select>
+
+                <button onclick="toggleModal()" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 font-semibold px-4 py-2 rounded-lg text-sm transition shadow-lg flex items-center gap-1.5 ml-auto sm:ml-0">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> Report Pump
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="grid grid-cols-1 lg:grid-cols-4">
+        <!-- Sidebar: Pump List -->
+        <div class="lg:col-span-1 bg-slate-900 border-r border-slate-800 h-[35vh] lg:h-[calc(100vh-73px)] overflow-y-auto p-4 space-y-3" id="pumpList">
+            <!-- Dynamically populated by JS -->
+        </div>
+
+        <!-- Map View -->
+        <div class="lg:col-span-3 relative">
+            <div id="map" class="w-full h-[65vh] lg:h-[calc(100vh-73px)]"></div>
+            
+            <!-- Map Legend -->
+            <div class="absolute bottom-6 right-6 bg-slate-900/90 backdrop-blur border border-slate-700 p-3 rounded-xl z-[400] text-xs space-y-1.5 shadow-xl">
+                <div class="font-bold text-slate-300 mb-1">Octane Legend</div>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-purple-500 inline-block"></span> 100 RON (XP100/Power100)</div>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span> 99 RON (Power 99)</div>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-orange-500 inline-block"></span> 97 RON (Speed 97)</div>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> 95 RON (XP95/Power95)</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Report Modal -->
+    <div id="reportModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[1000] hidden items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-6 shadow-2xl relative">
+            <button onclick="toggleModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">&times;</button>
+            <h3 class="text-lg font-bold mb-1">Report Fuel Availability</h3>
+            <p class="text-xs text-slate-400 mb-4">Help the Indian car & bike community track clean fuel.</p>
+            
+            <form id="reportForm" onsubmit="submitReport(event)" class="space-y-4 text-sm">
+                <div>
+                    <label class="block text-slate-400 mb-1">Brand & Station Name</label>
+                    <input type="text" required placeholder="e.g., IOCL COCO, Bandra West" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-amber-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-400 mb-1">Fuel Grade</label>
+                        <select id="newGrade" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-white">
+                            <option value="XP100">IOCL XP100 (100 RON)</option>
+                            <option value="Power100">HPCL Power100 (100 RON)</option>
+                            <option value="Power99">HPCL Power 99 (99 RON)</option>
+                            <option value="Speed97">BPCL Speed 97 (97 RON)</option>
+                            <option value="XP95">IOCL XP95 (95 RON)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">Est. Ethanol %</label>
+                        <select id="newEthanol" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-white">
+                            <option value="0">~0% (Trace/None)</option>
+                            <option value="4.5">≤ 4.5% Ethanol</option>
+                            <option value="11">≤ 11% Ethanol</option>
+                            <option value="12">≤ 12% Ethanol</option>
+                            <option value="15">≤ 15% Ethanol</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-400 mb-1">City</label>
+                        <input type="text" required placeholder="e.g., Mumbai" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-white">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">Current Price (₹)</label>
+                        <input type="number" step="0.01" required placeholder="160.00" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-white">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-2.5 rounded-lg transition mt-2">
+                    Submit Radar Pin
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Sample initial dataset representing real-world high octane pump availability in India
+        let pumps = [
+            { id: 1, name: "IOCL COCO Prabhadevi", brand: "IndianOil", grade: "XP100", ron: 100, ethanol: 0, price: 160.00, city: "Mumbai", lat: 19.0166, lng: 72.8281, status: "Available", verified: true },
+            { id: 2, name: "HPCL Auto Care Centre, BKC", brand: "HPCL", grade: "Power 99", ron: 99, ethanol: 11, price: 118.50, city: "Mumbai", lat: 19.0657, lng: 72.8681, status: "Available", verified: true },
+            { id: 3, name: "BPCL COCO Neeti Bagh", brand: "BPCL", grade: "Speed 97", ron: 97, ethanol: 12, price: 115.00, city: "New Delhi", lat: 28.5672, lng: 77.2100, status: "Available", verified: true },
+            { id: 4, name: "IOCL COCO Golf Course Rd", brand: "IndianOil", grade: "XP100", ron: 100, ethanol: 0, price: 160.00, city: "Gurugram", lat: 28.4595, lng: 77.0725, status: "Available", verified: true },
+            { id: 5, name: "HPCL Millennium Petrol Pump", brand: "HPCL", grade: "Power100", ron: 100, ethanol: 4.5, price: 162.00, city: "Bengaluru", lat: 12.9716, lng: 77.5946, status: "Limited Stock", verified: false },
+            { id: 6, name: "IOCL Jubilee Hills Service Station", brand: "IndianOil", grade: "XP95", ron: 95, ethanol: 12, price: 111.20, city: "Hyderabad", lat: 17.4326, lng: 78.4071, status: "Available", verified: true },
+            { id: 7, name: "BPCL Highway Service, Anna Salai", brand: "BPCL", grade: "Speed 97", ron: 97, ethanol: 12, price: 116.40, city: "Chennai", lat: 13.0604, lng: 80.2496, status: "Available", verified: true }
+        ];
+
+        // Initialize Map centered on India
+        const map = L.map('map').setView([20.5937, 78.9629], 5);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors & CartoDB'
+        }).addTo(map);
+
+        let markers = [];
+
+        function getMarkerColor(ron) {
+            if (ron === 100) return '#a855f7'; // Purple
+            if (ron === 99) return '#ef4444';  // Red
+            if (ron === 97) return '#f97316';  // Orange
+            return '#f59e0b';                  // Amber (95)
+        }
+
+        function renderMapAndList(data) {
+            // Clear existing markers
+            markers.forEach(m => map.removeLayer(m));
+            markers = [];
+            
+            const listContainer = document.getElementById('pumpList');
+            listContainer.innerHTML = '';
+
+            if (data.length === 0) {
+                listContainer.innerHTML = `<div class="text-slate-500 text-center py-8 text-sm">No pumps match your selected octane or ethanol filters.</div>`;
+                return;
+            }
+
+            data.forEach(pump => {
+                // Create custom SVG Leaflet marker
+                const color = getMarkerColor(pump.ron);
+                const customIcon = L.divIcon({
+                    className: 'custom-pin',
+                    html: `<div style="background-color: ${color}; width: 16px; height: 16px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px ${color};"></div>`,
+                    iconSize: [16, 16],
+                    iconAnchor: [8, 8]
+                });
+
+                const marker = L.marker([pump.lat, pump.lng], { icon: customIcon }).addTo(map);
+                
+                const popupContent = `
+                    <div class="text-slate-900 font-sans p-1 min-w-[200px]">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold px-1.5 py-0.5 rounded text-white" style="background-color: ${color}">${pump.grade} (${pump.ron} RON)</span>
+                            <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">${pump.status}</span>
+                        </div>
+                        <h4 class="font-bold text-sm mt-1.5">${pump.name}</h4>
+                        <p class="text-xs text-slate-600">${pump.city} • ₹${pump.price.toFixed(2)}/L</p>
+                        <div class="mt-2 pt-2 border-t border-slate-200 flex justify-between items-center text-xs">
+                            <span class="font-medium text-slate-700">Ethanol Blend:</span>
+                            <span class="font-bold ${pump.ethanol === 0 ? 'text-green-600' : 'text-amber-600'}">~${pump.ethanol}%</span>
+                        </div>
+                    </div>
+                `;
+                marker.bindPopup(popupContent, { className: 'custom-popup' });
+                markers.push(marker);
+
+                // Add to Sidebar List
+                const card = document.createElement('div');
+                card.className = "bg-slate-800/60 border border-slate-700/80 hover:border-slate-600 p-3.5 rounded-xl cursor-pointer transition flex flex-col justify-between";
+                card.onclick = () => {
+                    map.flyTo([pump.lat, pump.lng], 14, { duration: 1.5 });
+                    marker.openPopup();
+                };
+                card.innerHTML = `
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded text-slate-950 uppercase" style="background-color: ${color}">${pump.grade}</span>
+                            <h4 class="font-bold text-sm mt-1.5 leading-snug">${pump.name}</h4>
+                            <p class="text-xs text-slate-400 mt-0.5">${pump.city}</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-black text-amber-400">₹${pump.price.toFixed(2)}</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">${pump.ron} Octane</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-slate-700/50 flex items-center justify-between text-xs">
+                        <span class="text-slate-400 flex items-center gap-1">
+                            <i data-lucide="droplet" class="w-3.5 h-3.5 ${pump.ethanol === 0 ? 'text-emerald-400' : 'text-amber-400'}"></i>
+                            Ethanol: <strong class="text-slate-200">~${pump.ethanol}%</strong>
+                        </span>
+                        <span class="text-emerald-400 font-medium text-[11px]">${pump.status}</span>
+                    </div>
+                `;
+                listContainer.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function filterPumps() {
+            const octaneVal = document.getElementById('octaneFilter').value;
+            const ethanolVal = document.getElementById('ethanolFilter').value;
+
+            const filtered = pumps.filter(p => {
+                const matchOctane = octaneVal === 'ALL' || p.ron.toString() === octaneVal;
+                const matchEthanol = ethanolVal === 'ALL' || p.ethanol <= parseFloat(ethanolVal);
+                return matchOctane && matchEthanol;
+            });
+
+            renderMapAndList(filtered);
+        }
+
+        function toggleModal() {
+            const modal = document.getElementById('reportModal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+        }
+
+        function submitReport(e) {
+            e.preventDefault();
+            const gradeSelect = document.getElementById('newGrade');
+            const gradeText = gradeSelect.options[gradeSelect.selectedIndex].text;
+            let ronVal = 95;
+            if (gradeSelect.value.includes('100')) ronVal = 100;
+            else if (gradeSelect.value.includes('99')) ronVal = 99;
+            else if (gradeSelect.value.includes('97')) ronVal = 97;
+
+            // Add simulated new pin slightly offset around metro centers
+            const newPump = {
+                id: pumps.length + 1,
+                name: e.target[0].value,
+                brand: gradeSelect.value.includes('XP') ? 'IndianOil' : 'HPCL/BPCL',
+                grade: gradeSelect.value,
+                ron: ronVal,
+                ethanol: parseFloat(document.getElementById('newEthanol').value),
+                city: e.target[3].value,
+                price: parseFloat(e.target[4].value),
+                lat: 19.0760 + (Math.random() - 0.5) * 0.1, // Simulated coordinates nearby
+                lng: 72.8777 + (Math.random() - 0.5) * 0.1,
+                status: "Just Reported",
+                verified: false
+            };
+
+            pumps.unshift(newPump);
+            filterPumps();
+            toggleModal();
+            e.target.reset();
+            alert("Thank you! Your fuel report pin has been added to the radar.");
+        }
+
+        // Initial render
+        renderMapAndList(pumps);
+    </script>
+</body>
+</html>
