@@ -16,9 +16,13 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Premium Petrol Radar by Armaan Mangaonkar | High Octane India",
+  metadataBase: new URL("https://armaan-mangaonkar.vercel.app"),
+  title: "Premium Petrol Radar | High Octane India",
   description:
-    "India's first interactive map by Armaan Mangaonkar for locating high-octane (XP100, Power 99, Speed 97) and low-ethanol fuel stations. Real-time tracking across 120+ stations.",
+    "India's premier interactive map locating high-octane (XP100, Speed 97) & low-ethanol fuel stations. Real-time data & ML analytics by Armaan Mangaonkar.",
+  alternates: {
+    canonical: "/",
+  },
   keywords: [
     "Armaan Mangaonkar",
     "Armaan Mangaonkar projects",
@@ -41,9 +45,9 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: "Premium Petrol Radar by Armaan Mangaonkar",
+    title: "Premium Petrol Radar | High Octane India",
     description:
-      "Find XP100, Power 99, Speed 97, and E20 fuel stations across India. Created by Armaan Mangaonkar.",
+      "India's premier interactive map locating high-octane & low-ethanol fuel stations. ML analytics by Armaan Mangaonkar.",
     type: "website",
     locale: "en_IN",
     url: "https://armaan-mangaonkar.vercel.app",

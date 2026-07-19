@@ -1,0 +1,26 @@
+# Premium Petrol Radar
+
+**Description:** India's premier interactive map and Data Science platform for locating high-octane (XP100, Power 99, Speed 97) and low-ethanol fuel stations.
+**Author:** Armaan Mangaonkar
+**URL:** https://armaan-mangaonkar.vercel.app
+
+## Platform Overview
+Premium Petrol Radar is a full-stack Next.js application that provides:
+1. **Interactive Mapping:** Real-time location data for 120+ verified premium fuel stations across India.
+2. **Business Intelligence (BI) Analytics:** Dashboards tracking macro-level fuel imports versus sales velocity to detect supply chain deficits.
+3. **Machine Learning Forecasting:** Automated ML pipelines utilizing Facebook Prophet (Auto-ARIMA) and XGBoost to predict future prices and regional demand spikes.
+4. **Crowdsourcing:** A community-driven feature allowing users to report new pumps and correct existing data.
+
+## Key Features & Terminology
+- **XP100 / Speed 97 / Power 99:** High-octane premium petrol grades required for high-performance and luxury ICE vehicles in India.
+- **E20:** Petrol blended with 20% ethanol. The platform helps users find low-ethanol (E0-E10) alternatives for older engines.
+- **Machine Learning Integration:** Uses advanced predictive models to forecast localized fuel exhaustion and price volatility.
+
+## Technical Stack
+- Frontend: Next.js (App Router), React, Tailwind CSS v4, Recharts.
+- Map Engine: React-Leaflet with OpenStreetMap tiles.
+- Data Science / Backend: Python, Pandas, Numpy, Scikit-learn (simulated within the BI dashboard architecture).
+
+## Contact / Attribution
+Built and maintained by Armaan Mangaonkar.
+For inquiries, please visit the author's portfolio linked above.
