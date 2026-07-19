@@ -72,6 +72,8 @@ export interface StationMarker {
   lastVerified: string;
   verified: boolean;
   queueWaitMins?: number;
+  imageUrl?: string;
+  googleMapsUrl?: string;
 }
 
 /** Community-submitted fuel report */

@@ -1,0 +1,25 @@
+# Implementation Plan: Data Entry Upgrades & Sidebar Rich Media
+
+## Goal Description
+Enhance the data entry experience by merging singular and bulk uploads into a unified interface, and upgrade the "Recently Verified" sidebar section to include station images and direct Google Maps links.
+
+## Proposed Changes
+
+### 1. `src/components/RequestAreaModal.tsx` -> `AddPumpModal.tsx` (Rename & Upgrade)
+I will transform the current `RequestAreaModal` into a comprehensive `AddPumpModal` with two distinct tabs:
+- **Tab 1: Single Pump (Manual Entry)**: Form fields for Station Name, Brand, Google Maps URL, and an option to upload a photo.
+- **Tab 2: Bulk Upload (Excel/CSV)**: The existing drag-and-drop file upload for processing large datasets for an entire area.
+
+### 2. `src/components/Sidebar.tsx` [MODIFY]
+Update the "Recently Verified" list:
+- Add a small **Image Thumbnail** to each recent station (using a generic petrol pump placeholder or brand logo).
+- Add a **Google Maps Link/Button** that opens the exact coordinates of the pump in a new tab (`https://maps.google.com/?q=lat,lng`).
+
+### 3. `src/lib/types.ts` & `src/lib/mock-data.ts` [MODIFY]
+- Update the `StationMarker` type to optionally support an `imageUrl` and `googleMapsUrl` if they don't already exist.
+- Update mock data to include sample images.
+
+## Open Questions
+
+> [!TIP]
+> **Images**: For the recent changes sidebar, I will use high-quality Unsplash placeholders for the petrol pumps. Do you have specific brand logos you want used instead, or are generic modern petrol stations fine for now?

@@ -2,8 +2,10 @@
 // ============================================================
 // Premium Petrol Radar — Header Component
 // ============================================================
-import { Menu, X, Sun, Moon } from 'lucide-react';
+import { Menu, X, Sun, Moon, BarChart3, Map as MapIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import type { FuelFilterMode } from '@/lib/types';
 import FuelToggle from './FuelToggle';
@@ -19,6 +21,8 @@ interface HeaderProps {
 export default function Header({ onReportClick, onToggleSidebar, sidebarOpen, filterMode, onFilterChange }: HeaderProps) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
+  const isAnalytics = pathname === '/analytics';
 
   useEffect(() => {
     setMounted(true);
@@ -73,6 +77,24 @@ export default function Header({ onReportClick, onToggleSidebar, sidebarOpen, fi
             >
               {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
+          )}
+
+          {isAnalytics ? (
+            <Link
+              href="/"
+              className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-semibold px-4 py-2 rounded-xl text-sm transition-all duration-300"
+            >
+              <MapIcon className="w-4 h-4" />
+              <span className="hidden sm:inline">Back to Map</span>
+            </Link>
+          ) : (
+            <Link
+              href="/analytics"
+              className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-semibold px-4 py-2 rounded-xl text-sm transition-all duration-300"
+            >
+              <BarChart3 className="w-4 h-4" />
+              <span className="hidden sm:inline">Analytics</span>
+            </Link>
           )}
 
           <button

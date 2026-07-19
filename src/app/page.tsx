@@ -12,6 +12,7 @@ import FuelToggle from '@/components/FuelToggle';
 import Sidebar from '@/components/Sidebar';
 import MapLegend from '@/components/MapLegend';
 import ReportModal from '@/components/ReportModal';
+import RequestAreaModal from '@/components/RequestAreaModal';
 
 // ── Dynamic import: Leaflet requires browser window ──────────
 const MapDashboard = dynamic(() => import('@/components/MapDashboard'), {
@@ -36,6 +37,7 @@ export default function HomePage() {
   // ── State ──────────────────────────────────────────────────
   const [filterMode, setFilterMode] = useState<FuelFilterMode>('ultra-premium');
   const [modalOpen, setModalOpen] = useState(false);
+  const [requestAreaOpen, setRequestAreaOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeStationId, setActiveStationId] = useState<string | undefined>();
 
@@ -83,6 +85,7 @@ export default function HomePage() {
           onStationClick={handleStationClick}
           activeStationId={activeStationId}
           isOpen={sidebarOpen}
+          onRequestArea={() => setRequestAreaOpen(true)}
         />
 
         {/* Map Area */}
@@ -105,6 +108,11 @@ export default function HomePage() {
         userLat={geo.permissionGranted ? geo.lat : undefined}
         userLng={geo.permissionGranted ? geo.lng : undefined}
       />
+
+      {/* Request Area Modal */}
+      {requestAreaOpen && (
+        <RequestAreaModal onClose={() => setRequestAreaOpen(false)} />
+      )}
     </div>
   );
 }

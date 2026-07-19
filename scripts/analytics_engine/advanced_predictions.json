@@ -1,0 +1,150 @@
+{
+  "pipeline_run_at": "2026-07-20T01:55:18.453422",
+  "status": "SUCCESS",
+  "models_executed": 3,
+  "results": {
+    "price_forecast": {
+      "model_name": "Time-Series Auto-ARIMA",
+      "target": "XP100_Price",
+      "current_price": 162.81,
+      "7d_forecast_avg": 163.57,
+      "price_delta": 0.76,
+      "daily_forecasts": [
+        {
+          "date": "2026-07-21",
+          "predicted_price": 162.98
+        },
+        {
+          "date": "2026-07-22",
+          "predicted_price": 163.51
+        },
+        {
+          "date": "2026-07-23",
+          "predicted_price": 163.2
+        },
+        {
+          "date": "2026-07-24",
+          "predicted_price": 163.5
+        },
+        {
+          "date": "2026-07-25",
+          "predicted_price": 163.77
+        },
+        {
+          "date": "2026-07-26",
+          "predicted_price": 164.03
+        },
+        {
+          "date": "2026-07-27",
+          "predicted_price": 164.0
+        }
+      ]
+    },
+    "demand_forecast": {
+      "model_name": "Spatial XGBoost Regressor",
+      "target": "Regional_Demand_Volume",
+      "total_regions_analyzed": 3,
+      "critical_spikes": [],
+      "all_forecasts": [
+        {
+          "region": "Mumbai",
+          "grade": "XP100",
+          "predicted_demand_kl": 9.51,
+          "pct_change_vs_avg": -5.0,
+          "demand_spike_alert": false
+        },
+        {
+          "region": "Mumbai",
+          "grade": "Speed97",
+          "predicted_demand_kl": 19.64,
+          "pct_change_vs_avg": 23.5,
+          "demand_spike_alert": false
+        },
+        {
+          "region": "Mumbai",
+          "grade": "E20",
+          "predicted_demand_kl": 8.7,
+          "pct_change_vs_avg": -5.0,
+          "demand_spike_alert": false
+        },
+        {
+          "region": "Delhi NCR",
+          "grade": "XP100",
+          "predicted_demand_kl": 8.56,
+          "pct_change_vs_avg": -5.0,
+          "demand_spike_alert": false
+        },
+        {
+          "region": "Delhi NCR",
+          "grade": "Speed97",
+          "predicted_demand_kl": 13.68,
+          "pct_change_vs_avg": -5.0,
+          "demand_spike_alert": false
+        },
+        {
+          "region": "Delhi NCR",
+          "grade": "E20",
+          "predicted_demand_kl": 23.57,
+          "pct_change_vs_avg": -5.0,
+          "demand_spike_alert": false
+        },
+        {
+          "region": "Bengaluru",
+          "grade": "XP100",
+          "predicted_demand_kl": 18.49,
+          "pct_change_vs_avg": -5.0,
+          "demand_spike_alert": false
+        },
+        {
+          "region": "Bengaluru",
+          "grade": "Speed97",
+          "predicted_demand_kl": 18.32,
+          "pct_change_vs_avg": -5.0,
+          "demand_spike_alert": false
+        },
+        {
+          "region": "Bengaluru",
+          "grade": "E20",
+          "predicted_demand_kl": 13.23,
+          "pct_change_vs_avg": -5.0,
+          "demand_spike_alert": false
+        }
+      ]
+    },
+    "availability_classification": {
+      "model_name": "Random Forest Classifier",
+      "target": "Station_StockOut_Probability",
+      "high_risk_stations_count": 0,
+      "station_predictions": [
+        {
+          "station_id": "MUM-001",
+          "station_name": "IOCL COCO Prabhadevi",
+          "region": "Mumbai",
+          "stock_out_probability": 0.15,
+          "predicted_status": "Low Risk (Stable)"
+        },
+        {
+          "station_id": "MUM-006",
+          "station_name": "Shell Bandra West",
+          "region": "Mumbai",
+          "stock_out_probability": 0.57,
+          "predicted_status": "Medium Risk (Limited Stock Expected)"
+        },
+        {
+          "station_id": "DEL-004",
+          "station_name": "HPCL Connaught Place",
+          "region": "Delhi NCR",
+          "stock_out_probability": 0.8,
+          "predicted_status": "Medium Risk (Limited Stock Expected)"
+        },
+        {
+          "station_id": "BLR-001",
+          "station_name": "HPCL Millennium MG Road",
+          "region": "Bengaluru",
+          "stock_out_probability": 0.32,
+          "predicted_status": "Low Risk (Stable)"
+        }
+      ]
+    }
+  }
+}

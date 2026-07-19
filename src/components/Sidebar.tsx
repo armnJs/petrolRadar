@@ -16,6 +16,7 @@ interface SidebarProps {
   onStationClick: (station: StationMarker) => void;
   activeStationId?: string;
   isOpen: boolean;
+  onRequestArea: () => void;
 }
 
 type SidebarTab = 'stations' | 'analytics';
@@ -27,6 +28,7 @@ export default function Sidebar({
   onStationClick,
   activeStationId,
   isOpen,
+  onRequestArea,
 }: SidebarProps) {
   const [tab, setTab] = useState<SidebarTab>('stations');
   const [search, setSearch] = useState('');
@@ -163,27 +165,61 @@ export default function Sidebar({
               </div>
               <div className="space-y-2">
                 {analytics.recentlyVerified.slice(0, 5).map((station) => (
-                  <button
+                  <div
                     key={station.id}
-                    onClick={() => {
-                      setTab('stations');
-                      onStationClick(station);
-                    }}
-                    className="w-full text-left bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-white/10 rounded-lg p-2.5 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all"
+                    className="group bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-white/10 rounded-lg p-2.5 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all flex items-center justify-between gap-3"
                   >
-                    <div className="flex items-center justify-between">
-                      <div>
+                    <button
+                      onClick={() => {
+                        setTab('stations');
+                        onStationClick(station);
+                      }}
+                      className="flex-1 flex items-center gap-3 text-left overflow-hidden"
+                    >
+                      {station.imageUrl ? (
+                        <img src={station.imageUrl} alt={station.name} className="w-10 h-10 rounded-md object-cover flex-shrink-0 bg-slate-200" />
+                      ) : (
+                        <div className="w-10 h-10 rounded-md bg-slate-200 dark:bg-slate-700 flex items-center justify-center flex-shrink-0 text-slate-500">
+                          ⛽
+                        </div>
+                      )}
+                      <div className="overflow-hidden">
                         <p className="text-xs font-bold text-slate-900 dark:text-slate-200 truncate">{station.name}</p>
-                        <p className="text-[10px] text-slate-500">{station.city} • {station.gradeName}</p>
+                        <p className="text-[10px] text-slate-500 truncate">{station.city} • {station.gradeName}</p>
                       </div>
-                      <span className="text-xs font-bold text-slate-700 dark:text-slate-300">₹{station.pricePerLitre.toFixed(2)}</span>
+                    </button>
+                    
+                    <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                      <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">₹{station.pricePerLitre.toFixed(2)}</span>
+                      {station.googleMapsUrl && (
+                        <a 
+                          href={station.googleMapsUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-[10px] text-amber-500 hover:text-amber-600 dark:hover:text-amber-400 font-medium bg-amber-50 dark:bg-amber-500/10 px-1.5 py-0.5 rounded"
+                          title="Open in Google Maps"
+                        >
+                          Map ↗
+                        </a>
+                      )}
                     </div>
-                  </button>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
         )}
+      </div>
+
+      {/* Action Footer */}
+      <div className="p-3.5 border-t border-slate-200 dark:border-slate-800/60 mt-auto">
+        <button
+          onClick={onRequestArea}
+          className="w-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors flex items-center justify-center gap-2 text-sm shadow-sm"
+        >
+          <span className="text-amber-500 text-lg leading-none">+</span>
+          Upload Pump Data
+        </button>
       </div>
     </div>
   );
