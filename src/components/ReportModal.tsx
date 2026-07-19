@@ -96,7 +96,7 @@ export default function ReportModal({
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[1000] flex items-center justify-center p-4">
       <div
-        className="bg-white/95 dark:bg-slate-900/80 backdrop-blur-2xl border border-slate-200 dark:border-white/20 w-full max-w-lg rounded-2xl shadow-2xl relative overflow-hidden animate-in"
+        className="bg-slate-50/95 dark:bg-slate-900/80 backdrop-blur-2xl border border-slate-200 dark:border-white/20 w-full max-w-lg rounded-2xl shadow-2xl relative overflow-hidden animate-in"
       >
 
         <div className="p-6">
@@ -235,7 +235,7 @@ export default function ReportModal({
             <button
               type="submit"
               disabled={submitting}
-              className="w-full flex items-center justify-center gap-2 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 font-bold py-3 rounded-xl transition-all duration-300 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-slate-50 text-white dark:text-slate-900 font-bold py-3 rounded-xl transition-all duration-300 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? 'Submitting...' : 'Submit Radar Pin'}
             </button>

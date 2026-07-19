@@ -36,7 +36,7 @@ export default function FuelToggle({ activeMode, onChange, className = '' }: Fue
     <div className={`relative flex items-stretch bg-slate-200/50 dark:bg-slate-900/30 backdrop-blur-2xl border border-slate-300 dark:border-white/20 rounded-2xl p-1 shadow-inner dark:shadow-2xl overflow-hidden transition-colors ${className}`}>
       {/* Sliding Indicator */}
         <div
-          className={`absolute top-1 bottom-1 rounded-xl bg-white dark:bg-white/15 shadow-sm transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]`}
+          className={`absolute top-1 bottom-1 rounded-xl bg-slate-50 dark:bg-white/15 shadow-sm transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]`}
           style={{
             width: `calc(${100 / 3}% - 2px)`,
             left: `calc(${(activeIdx * 100) / 3}% + 1px)`,

@@ -39,7 +39,7 @@ export default function StatsPanel({ analytics }: StatsPanelProps) {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="bg-white/60 dark:bg-slate-900/40 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl p-3 transition-all hover:scale-[1.02] shadow-sm"
+            className="bg-slate-50/80 dark:bg-slate-900/40 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl p-3 transition-all hover:scale-[1.02] shadow-sm"
           >
             <div className="flex items-center gap-1.5 mb-1">
               <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">
@@ -52,7 +52,7 @@ export default function StatsPanel({ analytics }: StatsPanelProps) {
       </div>
 
       {/* Price Delta Card */}
-      <div className="bg-white/60 dark:bg-slate-900/40 backdrop-blur-md border border-slate-200 dark:border-white/20 rounded-xl p-3.5 shadow-sm">
+      <div className="bg-slate-50/80 dark:bg-slate-900/40 backdrop-blur-md border border-slate-200 dark:border-white/20 rounded-xl p-3.5 shadow-sm">
         <div className="flex items-center gap-2 mb-2">
           <span className="text-xs text-slate-700 dark:text-slate-300 font-bold">Price Comparison</span>
         </div>

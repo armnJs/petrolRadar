@@ -19,7 +19,7 @@ export default function StationCard({ station, onClick, isActive }: StationCardP
     <button
       onClick={onClick}
       className={`
-        w-full text-left bg-white/60 dark:bg-slate-900/40 backdrop-blur-md border rounded-xl p-3.5 cursor-pointer
+        w-full text-left bg-slate-50/80 dark:bg-slate-900/40 backdrop-blur-md border rounded-xl p-3.5 cursor-pointer
         transition-all duration-300 group hover:scale-[1.01] shadow-sm
         ${isActive
           ? 'border-amber-500/60 bg-amber-50 dark:bg-amber-500/10 shadow-md shadow-amber-500/10'

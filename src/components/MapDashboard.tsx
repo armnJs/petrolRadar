@@ -196,6 +196,12 @@ export default function MapDashboard({
     <MapContainer
       center={userLocation}
       zoom={DEFAULT_ZOOM}
+      minZoom={4}
+      maxBounds={[
+        [6.5, 68], // South-West India
+        [35.5, 97], // North-East India
+      ]}
+      maxBoundsViscosity={1.0}
       className="w-full h-full"
       zoomControl={false}
       attributionControl={true}

@@ -30,7 +30,7 @@ export default function MapLegend({ filterMode }: MapLegendProps) {
   const items = LEGENDS[filterMode];
 
   return (
-    <div className="absolute bottom-5 right-5 bg-white/60 dark:bg-slate-900/40 backdrop-blur-2xl border border-slate-200 dark:border-white/20 p-3.5 rounded-2xl z-[400] text-xs space-y-2 shadow-2xl max-w-[200px]">
+    <div className="absolute bottom-5 right-5 bg-slate-50/80 dark:bg-slate-900/40 backdrop-blur-2xl border border-slate-200 dark:border-white/20 p-3.5 rounded-2xl z-[400] text-xs space-y-2 shadow-2xl max-w-[200px]">
       <div className="font-bold text-slate-700 dark:text-slate-300 text-[11px] uppercase tracking-wider mb-1.5">
         Fuel Legend
       </div>

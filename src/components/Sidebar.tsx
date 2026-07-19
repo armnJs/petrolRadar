@@ -57,7 +57,7 @@ export default function Sidebar({
     <div
       className={`
         absolute lg:relative z-[450]
-        bg-white/90 dark:bg-slate-900/80 backdrop-blur-2xl border-r border-slate-200 dark:border-white/10 shadow-2xl
+        bg-slate-50/95 dark:bg-slate-900/80 backdrop-blur-2xl border-r border-slate-200 dark:border-white/10 shadow-2xl
         h-[calc(100vh-57px)] flex flex-col overflow-hidden
         transition-all duration-500
         ${isOpen ? 'w-full lg:w-[380px] left-0' : 'w-0 lg:w-0 -left-full lg:left-0'}
@@ -80,7 +80,7 @@ export default function Sidebar({
             onClick={() => setTab('stations')}
             className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all ${
               tab === 'stations'
-                ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+                ? 'bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
             }`}
           >
@@ -91,7 +91,7 @@ export default function Sidebar({
             onClick={() => setTab('analytics')}
             className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all ${
               tab === 'analytics'
-                ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+                ? 'bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
             }`}
           >

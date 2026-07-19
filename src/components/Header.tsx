@@ -25,7 +25,7 @@ export default function Header({ onReportClick, onToggleSidebar, sidebarOpen, fi
   }, []);
 
   return (
-    <header className="bg-white/60 dark:bg-slate-900/40 backdrop-blur-xl border-b border-slate-200 dark:border-white/10 shadow-sm dark:shadow-lg sticky top-0 z-[500] px-4 py-3 transition-colors duration-300">
+    <header className="bg-slate-50/80 dark:bg-slate-900/40 backdrop-blur-xl border-b border-slate-200 dark:border-white/10 shadow-sm dark:shadow-lg sticky top-0 z-[500] px-4 py-3 transition-colors duration-300">
       <div className="max-w-[1920px] mx-auto flex items-center justify-between gap-4">
         {/* Logo & Mobile Toggle */}
         <div className="flex items-center gap-3">
@@ -77,7 +77,7 @@ export default function Header({ onReportClick, onToggleSidebar, sidebarOpen, fi
 
           <button
             onClick={onReportClick}
-            className="group flex items-center gap-2 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 font-semibold px-4 py-2 rounded-xl text-sm transition-all duration-300"
+            className="group flex items-center gap-2 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-slate-50 text-white dark:text-slate-900 font-semibold px-4 py-2 rounded-xl text-sm transition-all duration-300"
           >
             <span className="hidden sm:inline">Report Pump</span>
             <span className="sm:hidden">Report</span>

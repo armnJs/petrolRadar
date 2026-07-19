@@ -17,15 +17,15 @@ import ReportModal from '@/components/ReportModal';
 const MapDashboard = dynamic(() => import('@/components/MapDashboard'), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full flex items-center justify-center bg-slate-950">
+    <div className="w-full h-full flex items-center justify-center bg-slate-50 dark:bg-slate-950">
       <div className="text-center space-y-4">
         <div className="relative w-16 h-16 mx-auto">
-          <div className="absolute inset-0 rounded-full border-4 border-slate-800" />
+          <div className="absolute inset-0 rounded-full border-4 border-slate-200 dark:border-slate-800" />
           <div className="absolute inset-0 rounded-full border-4 border-t-amber-500 animate-spin" />
         </div>
         <div>
-          <p className="text-slate-300 font-bold text-sm">Loading Map Engine</p>
-          <p className="text-slate-500 text-xs mt-1">Initializing CartoDB Dark Matter tiles...</p>
+          <p className="text-slate-900 dark:text-slate-300 font-bold text-sm">Loading Map Engine</p>
+          <p className="text-slate-500 text-xs mt-1">Initializing map tiles...</p>
         </div>
       </div>
     </div>
@@ -67,7 +67,7 @@ export default function HomePage() {
       />
 
       {/* Mobile Fuel Toggle (Desktop version is in Header) */}
-      <div className="lg:hidden bg-white/80 dark:bg-slate-900/40 backdrop-blur-xl border-b border-slate-200 dark:border-white/10 shadow-sm dark:shadow-md z-[400] transition-colors duration-300">
+      <div className="lg:hidden bg-slate-50/80 dark:bg-slate-900/40 backdrop-blur-xl border-b border-slate-200 dark:border-white/10 shadow-sm dark:shadow-md z-[400] transition-colors duration-300">
         <div className="max-w-3xl mx-auto">
           <FuelToggle activeMode={filterMode} onChange={setFilterMode} />
         </div>
