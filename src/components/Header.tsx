@@ -42,14 +42,14 @@ export default function Header({ onReportClick, onToggleSidebar, sidebarOpen, fi
           </button>
 
           <div className="flex items-center gap-2.5">
-            <div>
-              <h1 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <Link href="/" className="flex flex-col">
+              <h1 className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
                 Premium Petrol Radar
               </h1>
-              <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide">
-                High Octane & Low-Ethanol Fuel Tracker • India
-              </p>
-            </div>
+              <span className="text-[10px] sm:text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">
+                Live Map Dashboard
+              </span>
+            </Link>
           </div>
         </div>
 
@@ -81,7 +81,7 @@ export default function Header({ onReportClick, onToggleSidebar, sidebarOpen, fi
 
           {isAnalytics ? (
             <Link
-              href="/"
+              href="/map"
               className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-semibold px-4 py-2 rounded-xl text-sm transition-all duration-300"
             >
               <MapIcon className="w-4 h-4" />
