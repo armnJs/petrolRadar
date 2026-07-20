@@ -91,5 +91,9 @@ export function useStations(filterMode: FuelFilterMode) {
     setAllStations((prev) => [station, ...prev]);
   };
 
-  return { allStations, filteredStations, analytics, loading, addStation };
+  const addStationsBulk = (stations: StationMarker[]) => {
+    setAllStations((prev) => [...stations, ...prev]);
+  };
+
+  return { allStations, filteredStations, analytics, loading, addStation, addStationsBulk };
 }

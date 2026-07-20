@@ -3,13 +3,16 @@
 // Premium Petrol Radar — Request Area Modal
 // ============================================================
 import { useState } from 'react';
-import { X, UploadCloud, MapPin, FileSpreadsheet } from 'lucide-react';
+import { X, UploadCloud, MapPin, FileSpreadsheet, CheckCircle2 } from 'lucide-react';
+import Papa from 'papaparse';
+import type { StationMarker } from '@/lib/types';
 
 interface RequestAreaModalProps {
   onClose: () => void;
+  onBulkAdd?: (stations: StationMarker[]) => void;
 }
 
-export default function RequestAreaModal({ onClose }: RequestAreaModalProps) {
+export default function RequestAreaModal({ onClose, onBulkAdd }: RequestAreaModalProps) {
   const [tab, setTab] = useState<'single' | 'bulk'>('single');
   
   // Single Pump State
@@ -25,21 +28,66 @@ export default function RequestAreaModal({ onClose }: RequestAreaModalProps) {
   
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [isPreviewing, setIsPreviewing] = useState(false);
+  const [parsedStations, setParsedStations] = useState<StationMarker[]>([]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitting(true);
 
-    // Mock API call
+    if (tab === 'bulk' && file) {
+      setSubmitting(true);
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          const newStations: StationMarker[] = results.data.map((row: any) => ({
+            id: `bulk-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            name: row.name || 'Unknown Station',
+            lat: parseFloat(row.lat) || 0,
+            lng: parseFloat(row.lng) || 0,
+            gradeName: row.gradeName || 'Standard',
+            pricePerLitre: parseFloat(row.pricePerLitre) || 0,
+            verified: true,
+            lastVerified: new Date().toISOString(),
+            address: row.address || '',
+            amenities: {
+              air: true,
+              nitrogen: false,
+              washroom: true,
+            },
+          }));
+          
+          setParsedStations(newStations);
+          setIsPreviewing(true);
+          setSubmitting(false);
+        },
+        error: (err) => {
+          console.error('PapaParse Error:', err);
+          setSubmitting(false);
+        }
+      });
+      return;
+    }
+
+    // Single upload mock
+    setSubmitting(true);
     setTimeout(() => {
       setSubmitting(false);
       setSuccess(true);
-
-      // Close modal after showing success message briefly
-      setTimeout(() => {
-        onClose();
-      }, 2000);
+      setTimeout(() => onClose(), 2000);
     }, 1500);
+  };
+
+  const handleConfirmBulk = () => {
+    setSubmitting(true);
+    setTimeout(() => {
+      if (onBulkAdd && parsedStations.length > 0) {
+        onBulkAdd(parsedStations);
+      }
+      setSubmitting(false);
+      setSuccess(true);
+      setTimeout(() => onClose(), 2000);
+    }, 800);
   };
 
   return (
@@ -102,6 +150,57 @@ export default function RequestAreaModal({ onClose }: RequestAreaModalProps) {
               <p className="text-sm text-slate-500 dark:text-slate-400">
                 Thank you for contributing to the Premium Petrol Radar.
               </p>
+            </div>
+          ) : isPreviewing ? (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FileSpreadsheet className="w-8 h-8" />
+                </div>
+                <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Review CSV Data</h4>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  We successfully parsed {parsedStations.length} stations from your file.
+                </p>
+              </div>
+
+              <div className="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-4 max-h-48 overflow-y-auto">
+                <ul className="space-y-3">
+                  {parsedStations.slice(0, 5).map((station, i) => (
+                    <li key={i} className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-green-500" />
+                        <span className="font-medium text-slate-700 dark:text-slate-300">{station.name}</span>
+                      </div>
+                      <span className="text-slate-500 bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded text-xs font-bold">
+                        {station.gradeName}
+                      </span>
+                    </li>
+                  ))}
+                  {parsedStations.length > 5 && (
+                    <li className="text-center text-xs text-slate-500 pt-2 border-t border-slate-200 dark:border-slate-700">
+                      + {parsedStations.length - 5} more stations...
+                    </li>
+                  )}
+                </ul>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsPreviewing(false)}
+                  className="flex-1 py-3 text-sm font-bold text-slate-600 dark:text-slate-400 bg-slate-200 dark:bg-slate-800 rounded-xl hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleConfirmBulk}
+                  disabled={submitting}
+                  className="flex-[2] py-3 text-sm font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-xl shadow-lg transition-all disabled:opacity-50"
+                >
+                  {submitting ? 'Plotting on map...' : `Plot ${parsedStations.length} Stations`}
+                </button>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">

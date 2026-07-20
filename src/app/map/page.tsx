@@ -42,7 +42,7 @@ export default function HomePage() {
   const [activeStationId, setActiveStationId] = useState<string | undefined>();
 
   // ── Data hooks ─────────────────────────────────────────────
-  const { filteredStations, analytics, addStation } = useStations(filterMode);
+  const { filteredStations, analytics, addStation, addStationsBulk } = useStations(filterMode);
   const geo = useGeolocation();
 
   // ── Callbacks ──────────────────────────────────────────────
@@ -111,7 +111,10 @@ export default function HomePage() {
 
       {/* Request Area Modal */}
       {requestAreaOpen && (
-        <RequestAreaModal onClose={() => setRequestAreaOpen(false)} />
+        <RequestAreaModal 
+          onClose={() => setRequestAreaOpen(false)} 
+          onBulkAdd={(stations) => addStationsBulk(stations)}
+        />
       )}
     </div>
   );
