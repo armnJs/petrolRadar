@@ -2,7 +2,7 @@
 // ============================================================
 // Premium Petrol Radar — Header Component
 // ============================================================
-import { Menu, X, Sun, Moon, BarChart3, Map as MapIcon } from 'lucide-react';
+import { Menu, X, Sun, Moon, BarChart3, Map as MapIcon, BookOpen } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -53,9 +53,11 @@ export default function Header({ onReportClick, onToggleSidebar, sidebarOpen, fi
           </div>
         </div>
 
-        {/* Center: Fuel Toggle (hidden on small screens, or we can make it responsive) */}
+        {/* Center: Fuel Toggle (Only show on /map) */}
         <div className="hidden lg:flex flex-1 justify-center max-w-md mx-4">
-          <FuelToggle activeMode={filterMode} onChange={onFilterChange} className="w-full" />
+          {pathname === '/map' && (
+            <FuelToggle activeMode={filterMode} onChange={onFilterChange} className="w-full" />
+          )}
         </div>
 
         {/* Right Actions */}
@@ -78,6 +80,14 @@ export default function Header({ onReportClick, onToggleSidebar, sidebarOpen, fi
               {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
           )}
+
+          <Link
+            href="/articles"
+            className="hidden lg:flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-semibold px-4 py-2 rounded-xl text-sm transition-all duration-300"
+          >
+            <BookOpen className="w-4 h-4" />
+            <span>Articles</span>
+          </Link>
 
           {isAnalytics ? (
             <Link
