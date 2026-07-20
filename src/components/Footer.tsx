@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Droplets } from 'lucide-react';
+import { Droplets, Github, Linkedin } from 'lucide-react';
 
 export default function Footer() {
   const pathname = usePathname();
@@ -25,25 +25,37 @@ export default function Footer() {
           Engineered by <a href="https://armaan-mangaonkar.vercel.app" target="_blank" rel="noopener noreferrer" className="font-bold text-indigo-500 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors">Armaan Mangaonkar</a>
         </p>
 
-        <div className="flex items-center gap-3">
-          <Link href="/terms" className="text-[10px] sm:text-xs font-medium hover:text-slate-900 dark:hover:text-white transition-colors">
-            Terms
-          </Link>
-          <span className="text-slate-300 dark:text-slate-700">•</span>
-          <Link href="/privacy" className="text-[10px] sm:text-xs font-medium hover:text-slate-900 dark:hover:text-white transition-colors">
-            Privacy
-          </Link>
-          <span className="text-slate-300 dark:text-slate-700">•</span>
-          <a 
-            href="https://medium.com/@armaanshaikh0706/the-green-transitions-blind-spot-how-we-built-a-machine-learning-radar-for-india-s-ultra-premium-9b7e744d2fd9" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="text-[10px] sm:text-xs font-medium text-indigo-500 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors"
-          >
-            Medium Case Study
-          </a>
+          <div className="flex items-center gap-3 mt-4 md:mt-0">
+            <Link href="/terms" className="min-h-[48px] min-w-[32px] flex items-center justify-center text-[10px] sm:text-xs font-medium hover:text-slate-900 dark:hover:text-white transition-colors">
+              Terms
+            </Link>
+            <span className="text-slate-300 dark:text-slate-700">•</span>
+            <Link href="/privacy" className="min-h-[48px] min-w-[32px] flex items-center justify-center text-[10px] sm:text-xs font-medium hover:text-slate-900 dark:hover:text-white transition-colors">
+              Privacy
+            </Link>
+            <span className="text-slate-300 dark:text-slate-700 mx-1">•</span>
+            <div className="flex items-center gap-2">
+              <a 
+                href="https://github.com/armnJs" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="min-h-[48px] min-w-[48px] flex items-center justify-center text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
+                aria-label="GitHub Profile"
+              >
+                <Github className="w-4 h-4" />
+              </a>
+              <a 
+                href="https://www.linkedin.com/in/armaan-mangaonkar-88620a298/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="min-h-[48px] min-w-[48px] flex items-center justify-center text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 transition-colors"
+                aria-label="LinkedIn Profile"
+              >
+                <Linkedin className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
   );
 }

@@ -26,11 +26,14 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://petrol-radar.vercel.app"),
-  title: "Premium Petrol Radar | High Octane India",
+  title: "Premium Petrol Radar | Real-Time High Octane Fuel Tracking India",
   description:
-    "India's premier interactive map locating high-octane (XP100, Speed 97) & low-ethanol fuel stations. Real-time data & ML analytics by Armaan Mangaonkar.",
+    "India's premier map for high-octane (XP100) & low-ethanol fuel stations. Real-time tracking & ML analytics by Armaan Mangaonkar.",
   alternates: {
     canonical: "/",
+    languages: {
+      "en-IN": "https://petrol-radar.vercel.app",
+    },
   },
   keywords: [
     "Armaan Mangaonkar",
@@ -60,9 +63,9 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: "Premium Petrol Radar | High Octane India",
+    title: "Premium Petrol Radar | Real-Time High Octane Fuel Tracking India",
     description:
-      "India's premier interactive map locating high-octane & low-ethanol fuel stations. ML analytics by Armaan Mangaonkar.",
+      "India's premier map for high-octane (XP100) & low-ethanol fuel stations. Real-time tracking & ML analytics by Armaan Mangaonkar.",
     type: "website",
     locale: "en_IN",
     url: "https://armaan-mangaonkar.vercel.app",
