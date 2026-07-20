@@ -172,11 +172,10 @@ export default function RequestAreaModal({ onClose }: RequestAreaModalProps) {
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">
-                        Pincode
+                        Pincode (Optional)
                       </label>
                       <input
                         type="text"
-                        required
                         value={pincode}
                         onChange={(e) => setPincode(e.target.value)}
                         placeholder="e.g., 560001"
