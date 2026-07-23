@@ -3,9 +3,10 @@
 // Premium Petrol Radar — Request Area Modal
 // ============================================================
 import { useState } from 'react';
-import { X, UploadCloud, MapPin, FileSpreadsheet, CheckCircle2 } from 'lucide-react';
+import { X, UploadCloud, MapPin, FileSpreadsheet, CheckCircle2, AlertTriangle } from 'lucide-react';
 import Papa from 'papaparse';
 import type { StationMarker } from '@/lib/types';
+import { supabase } from '@/lib/supabase';
 
 interface RequestAreaModalProps {
   onClose: () => void;
@@ -30,6 +31,7 @@ export default function RequestAreaModal({ onClose, onBulkAdd }: RequestAreaModa
   const [success, setSuccess] = useState(false);
   const [isPreviewing, setIsPreviewing] = useState(false);
   const [parsedStations, setParsedStations] = useState<StationMarker[]>([]);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,16 +80,74 @@ export default function RequestAreaModal({ onClose, onBulkAdd }: RequestAreaModa
     }, 1500);
   };
 
-  const handleConfirmBulk = () => {
+  const handleConfirmBulk = async () => {
     setSubmitting(true);
-    setTimeout(() => {
+    setUploadError(null);
+
+    // If Supabase is not configured, fallback to standard mock state insertion
+    if (!supabase) {
+      setTimeout(() => {
+        if (onBulkAdd && parsedStations.length > 0) {
+          onBulkAdd(parsedStations);
+        }
+        setSubmitting(false);
+        setSuccess(true);
+        setTimeout(() => onClose(), 2000);
+      }, 800);
+      return;
+    }
+
+    try {
+      for (const station of parsedStations) {
+        // 1. Insert into fuel_stations
+        // Triggers will auto-generate the PostGIS location POINT(lng, lat)
+        const { data: stationData, error: stationError } = await supabase
+          .from('fuel_stations')
+          .insert({
+            name: station.name,
+            brand: station.name.includes('HP') ? 'HPCL' : station.name.includes('IOCL') || station.name.includes('Indian') ? 'IndianOil' : station.name.includes('BP') ? 'BPCL' : station.name.includes('Shell') ? 'Shell' : 'Other',
+            city: city || station.address.split(',')[0] || 'Unknown',
+            state: 'Unknown',
+            lat: station.lat,
+            lng: station.lng,
+          })
+          .select('id')
+          .single();
+
+        if (stationError) {
+          throw new Error(`DB Error (Station ${station.name}): ${stationError.message}`);
+        }
+
+        // 2. Insert into fuel_grades
+        const { error: gradeError } = await supabase
+          .from('fuel_grades')
+          .insert({
+            station_id: stationData.id,
+            grade_name: station.gradeName,
+            ron_rating: station.gradeName.includes('100') ? 100 : station.gradeName.includes('99') ? 99 : station.gradeName.includes('97') ? 97 : 95,
+            ethanol_pct: station.gradeName.includes('E0') ? 0 : 20,
+            price_per_litre: station.pricePerLitre,
+            availability_status: 'Just Reported',
+          });
+
+        if (gradeError) {
+          throw new Error(`DB Error (Grade ${station.name}): ${gradeError.message}`);
+        }
+      }
+
+      // Success! Update global state to show on map instantly
       if (onBulkAdd && parsedStations.length > 0) {
         onBulkAdd(parsedStations);
       }
       setSubmitting(false);
       setSuccess(true);
       setTimeout(() => onClose(), 2000);
-    }, 800);
+
+    } catch (err: any) {
+      console.error(err);
+      setUploadError(err.message || 'An error occurred during DB upload.');
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -183,6 +243,13 @@ export default function RequestAreaModal({ onClose, onBulkAdd }: RequestAreaModa
                   )}
                 </ul>
               </div>
+
+              {uploadError && (
+                <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-xl text-xs font-bold flex items-start gap-2 border border-red-200 dark:border-red-900/50">
+                  <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <span>{uploadError}</span>
+                </div>
+              )}
 
               <div className="flex gap-3">
                 <button
